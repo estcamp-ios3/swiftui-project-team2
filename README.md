@@ -1,5 +1,4 @@
-# 앱 이름
-SHADOW QUIZ
+# SHADOW QUIZ
 
 # ADS
 - 페르소나 : 20대 대학생, 지루한 지하철/통학버스 시간을 즐겁게 보내고 싶어하며, 경쟁적인 요소가 있는 게임을 통해 성취감을 느끼는 것을 선호한다.
@@ -10,18 +9,17 @@ SHADOW QUIZ
 - 간단하고 직관적인 UI/UX
 - 경쟁적인 랭킹 시스템
 - 짧은 플레이 시간을 위한 빠른 진행
-- 다양한 게임 모드 (예: 난이도, 주제 등)
-- 꾸준한 업데이트 및 이벤트 제공
+- 다양한 게임 모드 (난이도, 주제 등)
 
 # 작동환경
 - XCODE 16.4
 - iOS 18.5
 
 # 개발자
-- 김동우
-- 권태우
-- 유재환
-- 임종혁
+- [권태우](https://github.com/boifromangye)
+- [김동우](https://github.com/dkim124)
+- [유재환](https://github.com/jhyoo93)
+- [임종혁](https://github.com/JongHyuck-Lim)
 
 # 라이선스
 Licensed under the [MIT](LICENSE) license.
