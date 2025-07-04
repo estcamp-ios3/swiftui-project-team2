@@ -4,6 +4,7 @@
 //
 //  Created by 권태우 on 7/4/25.
 //
+//  2조 프로토타입 ^^
 
 import SwiftUI
 
