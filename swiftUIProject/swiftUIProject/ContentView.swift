@@ -62,8 +62,13 @@ struct GameView: View {
     @State var brokenHeart: String = "💔"
     @State var lives: String = "❤️❤️❤️"
     
+    @State var isCorrect: Bool = false
+    
     var body: some View {
         NavigationStack{
+            Text("치킨 좀 먹고 왔습니다")
+                .font(.largeTitle)
+                .foregroundStyle(.red)
             Text("You can get \(10+level) points per a correct answer.")
             Image("quiz")
             Text("\(hint)")
@@ -72,7 +77,7 @@ struct GameView: View {
             HStack{
                 Button("Check"){
                     if answer == "pikachu"{
-                        
+                        isCorrect = true
                     } else{
                         chance -= 1
                         switch chance{
@@ -85,6 +90,9 @@ struct GameView: View {
                         }
                     }
                     
+                }
+                .navigationDestination(isPresented: $isCorrect){
+                    ResultView()
                 }
                 Button("Pass"){
                     
@@ -102,13 +110,20 @@ struct GameView: View {
 }
 
 struct ResultView: View {
+    let teamMates: [String] = ["권태우", "김동우", "유재환", "임종혁"]
+    @State var teamLeader: String = ""
+    
     var body: some View {
         NavigationStack{
-            Text("You got 10 points.")
+            Text("조장은 \(teamLeader) ㅊㅊ")
+            Button("드가자잇"){
+                teamLeader = teamMates.randomElement() ?? "Try Again"
+            }
         }
     }
 }
 
 #Preview {
-    ContentView()
+    //    ContentView()
+    GameView(level: 1)
 }
