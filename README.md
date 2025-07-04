@@ -13,7 +13,7 @@
 
 # 작동환경
 - XCODE 16.4
-- iOS 18.5
+- iOS 18
 
 # 개발자
 - [권태우](https://github.com/boifromangye)
