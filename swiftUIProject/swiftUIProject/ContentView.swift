@@ -54,6 +54,10 @@ struct GameView: View {
     @State var answer: String = ""
     @State var hint: String = ""
     
+    @State var heart: String = "❤️"
+    @State var brokenHeart: String = "💔"
+    @State var lives: String = "❤️❤️❤️"
+    
     var body: some View {
         VStack{
             Text("You can get \(10+level) points per a correct answer.")
@@ -63,7 +67,11 @@ struct GameView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             HStack{
                 Button("Check"){
-                    
+                    if answer == "pikachu"{
+                        
+                    } else{
+                        lives = heart + heart + brokenHeart
+                    }
                 }
                 Button("Pass"){
                     
@@ -75,6 +83,7 @@ struct GameView: View {
             Button("Finish the quiz"){
                 
             }
+            Text(lives)
         }
     }
 }
