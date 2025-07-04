@@ -12,6 +12,9 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
+            Text("심심하신가요?\n그렇다면 불러주세요")
+                .font(.largeTitle)
+                .fontWeight(.bold)
             Text("Shadow QUIZ")
             Text("Level")
             HStack {
@@ -53,13 +56,14 @@ struct GameView: View {
     let level: Int
     @State var answer: String = ""
     @State var hint: String = ""
+    @State var chance: Int = 3
     
     @State var heart: String = "❤️"
     @State var brokenHeart: String = "💔"
     @State var lives: String = "❤️❤️❤️"
     
     var body: some View {
-        VStack{
+        NavigationStack{
             Text("You can get \(10+level) points per a correct answer.")
             Image("quiz")
             Text("\(hint)")
@@ -70,8 +74,17 @@ struct GameView: View {
                     if answer == "pikachu"{
                         
                     } else{
-                        lives = heart + heart + brokenHeart
+                        chance -= 1
+                        switch chance{
+                        case 1:
+                            lives = heart + brokenHeart + brokenHeart
+                        case 2:
+                            lives = heart + heart + brokenHeart
+                        default:
+                            lives = brokenHeart + brokenHeart + brokenHeart
+                        }
                     }
+                    
                 }
                 Button("Pass"){
                     
@@ -84,6 +97,14 @@ struct GameView: View {
                 
             }
             Text(lives)
+        }
+    }
+}
+
+struct ResultView: View {
+    var body: some View {
+        NavigationStack{
+            Text("You got 10 points.")
         }
     }
 }
