@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct RankingView: View {
+    var backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
+    
     var body: some View {
         ZStack {
-            Color("CBEFB9")
-                .ignoresSafeArea()
+            backgroundColor.ignoresSafeArea()
             VStack{
                 Text("RANKING")
+                    .foregroundStyle(Color.black.opacity(0.5))
                     .font(.largeTitle)
                     .padding()
                 Grid{
@@ -25,17 +27,17 @@ struct RankingView: View {
                     .padding()
                     
                     GridRow{
-                        Text("1")
+                        Text("🥇")
                         Text("MIDKING")
                         Text("300")
                     }
                     GridRow{
-                        Text("2")
+                        Text("🥈")
                         Text("JUGKING")
                         Text("270")
                     }
                     GridRow{
-                        Text("3")
+                        Text("🥉")
                         Text("hide on bush")
                         Text("200")
                     }
