@@ -37,7 +37,7 @@ struct RankingView: View {
             }
             GridRow{
                 Text("4")
-                Text("DK Képler")
+                Text("CJ CloudTempler")
                 Text("180")
             }
             GridRow{
@@ -46,8 +46,14 @@ struct RankingView: View {
                 Text("100")
             }
         }
-        Text(".\n.\n.\nIf you want to leave your name, be stronger.")
-        Button()
+        Text("If you want to leave your name, be stronger.")
+            .padding()
+        Button("Home"){
+            
+        }
+        .foregroundStyle(.white)
+        .frame(width: 200, height: 50)
+        .background(Color.black.opacity(0.5))
     }
 }
 
