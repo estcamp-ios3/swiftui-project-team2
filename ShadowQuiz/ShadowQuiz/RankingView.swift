@@ -52,7 +52,7 @@ struct RankingView: View {
                 }
                 .padding(.horizontal, 16)
 
-                LazyVGrid(columns: , count: 3)){
+                LazyVGrid(columns: <#T##[GridItem]#>)){
                     GridRow{
                         Text("Rank")
                         Text("Nickname")
