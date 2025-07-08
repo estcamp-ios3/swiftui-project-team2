@@ -10,21 +10,7 @@ import SwiftUI
 struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     
-    @State var isPokemonSelected: Bool = true
-    @State var isDinoSelected: Bool = false
-    @State var isAnimalsSelected: Bool = false
-    
-    @State var selectedTextColor: Color = Color.black
-    @State var selectedBgColor: Color = Color.white
-    @State var unselectedTextColor: Color = Color.white
-    @State var unselectedBgColor: Color = Color.black.opacity(0.5)
-    
-    func btnPokemonPressed(){
-        isPokemonSelected = true
-        isDinoSelected = false
-        isAnimalsSelected = false
-        
-    }
+    @State private var selectedSubjectDefult: String = "Pokémon"
     
     var body: some View {
         ZStack {
@@ -34,30 +20,29 @@ struct RankingView: View {
                     .foregroundStyle(Color.black.opacity(0.5))
                     .font(.largeTitle)
                     .padding()
-                HStack{
-                    Button("Pokémon"){
-                        btnPokemonPressed()
+                HStack(spacing: 0) {
+                    ForEach(["Pokémon", "Dinosaur", "Animal", "Things"], id: \.self) { sub in
+                        Button {
+                            selectedSubjectDefult = sub
+                        } label: {
+                            Text(sub)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                                .background(
+                                    selectedSubjectDefult == sub
+                                    ? Color.white
+                                    : Color.black.opacity(0.5)
+                                )
+                                .foregroundColor(
+                                    selectedSubjectDefult == sub
+                                    ? Color.black
+                                    : Color.white
+                                )
+                        }
                     }
-                    .foregroundStyle(selectedTextColor)
-                    .frame(width: 100, height: 50)
-                    .background(selectedBgColor)
-                    Button("Dinosaurs"){
-                        isPokemonSelected = false
-                        isDinoSelected = true
-                        isAnimalsSelected = false
-                    }
-                    .foregroundStyle(unselectedTextColor)
-                    .frame(width: 100, height: 50)
-                    .background(unselectedBgColor)
-                    Button("Animals"){
-                        isPokemonSelected = false
-                        isDinoSelected = false
-                        isAnimalsSelected = true
-                    }
-                    .foregroundStyle(unselectedTextColor)
-                    .frame(width: 100, height: 50)
-                    .background(unselectedBgColor)
                 }
+                .padding(.horizontal, 16)
+
                 Grid{
                     GridRow{
                         Text("Rank")
