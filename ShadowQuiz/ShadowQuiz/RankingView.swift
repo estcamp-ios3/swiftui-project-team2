@@ -56,8 +56,8 @@ struct RankingView: View {
                 LazyVGrid(columns: columns){
                     ForEach(0x1f600...0x1f679, id: \.self) { value in
                         Text(ranking[1].nickName)
-                                             .font(.largeTitle)
-                                     }
+                            .font(.largeTitle)
+                    }
                 }
                 Text("If you want to leave your name, be stronger.")
                     .padding()
