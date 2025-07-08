@@ -8,22 +8,42 @@
 import SwiftUI
 import SwiftData
 
+@Model
+class GamePlay {
+    var level: String // 난이도 프로퍼티
+    var topic: String // 주제 프로퍼티
+    
+    // 초기화
+    init(level: String, topic: String) {
+        self.level = level
+        self.topic = topic
+    }
+}
 
 @Model
 class Ranking {
-    var nickname: String
+    @Attribute(.unique) var id: UUID = UUID()
+    var nickName: String
     var score: Int
-
-    init(nickname: String, score: Int) {
-        self.nickname = nickname
+    
+    // 초기화
+    init(id: UUID = UUID(), nickName: String, score: Int) {
+        self.id = id
+        self.nickName = nickName
         self.score = score
     }
 }
 
 struct MainView: View {
-
-    @State private var selectedLevelDefult: String = "하"
-    @State private var selectedSubjectDefult: String = "포켓몬"
+    
+    @Query var rankings: [Ranking]
+    
+    // SwiftData modelContext 가져오기
+    @Environment(\.modelContext) private var context
+    
+    @State var selectedLevelDefult: String = "하"
+    @State var selectedSubjectDefult: String = "포켓몬"
+    @State var navigateToGame: Bool = false
     
     // 랭킹 인덱스
     @State private var scoreIndex: Int = 0
@@ -34,6 +54,7 @@ struct MainView: View {
         "🥈 2위[닉네임] - 140점",
         "🥉 3위[닉네임] - 120점"
     ]
+    
 
     // 3초마다 타이머
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
@@ -108,8 +129,10 @@ struct MainView: View {
                     
                     Spacer()
                     
+                    // START 버튼
                     Button {
-                        print("Start!")
+                        saveGamePlay()
+                        navigateToGame = true
                     } label: {
                         ZStack {
                             Circle()
@@ -134,24 +157,63 @@ struct MainView: View {
                     
                     // 슬라이드 랭킹
                     Text(rankList[scoreIndex])
-                        .font(.system(size: 28, weight: .bold))
+                        .font(.system(size: 21, weight: .bold))
                         .fontDesign(.rounded)
                         .foregroundColor(Color.black.opacity(0.5))
                         .onReceive(timer) { _ in
                             withAnimation {
-                                scoreIndex = (scoreIndex + 1) % rankList.count
+                                scoreIndex = (scoreIndex + 1) % max(rankList.count, 1)
                             }
                         }
                     
                     Spacer()
-                    
+                }
+                
+                // 난이도,주제 데이터를 담아 view 이동
+                .navigationDestination(isPresented: $navigateToGame) {
+                    // GamePlayView(level: selectedLevelDefult, topic: selectedSubjectDefult)
+                    GameView(level: selectedLevelDefult, topic: selectedSubjectDefult)
                 }
                 
             }
+//            .onAppear {
+//                printRankings()
+//            }
         }
     }
+    
+//    func printRankings() {
+//        if rankings.isEmpty {
+//            print("저장된 랭킹이 없습니다.")
+//        } else {
+//            print("현재 랭킹 목록:")
+//            for (index, rank) in rankings.enumerated() {
+//                print("\(index + 1). \(rank.nickName) - \(rank.score)점 (id: \(rank.id))")
+//            }
+//        }
+//    }
 
+    func saveGamePlay() {
+        // 선택된 난이도, 주제 GamePlay 인스턴스 생성
+        let game = GamePlay(level: selectedLevelDefult, topic: selectedSubjectDefult)
+        // 데이터 컨텍스트에 insert
+        context.insert(game)
+    }
 }
+// 임시 생성
+struct GameView: View {
+    var level: String
+    var topic: String
+
+    var body: some View {
+        VStack() {
+            Text("난이도: \(level)")
+            Text("주제: \(topic)")
+        }
+    }
+}
+
+
 
 #Preview {
     MainView()
