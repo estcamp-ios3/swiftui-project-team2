@@ -18,7 +18,7 @@ struct ContentView: View {
                     Image(systemName: "gamecontroller.fill")
                         .imageScale(.large)
                         .foregroundStyle(.tint)
-                    NavigationLink(destination: ResultView(score: 0)) {
+                    NavigationLink(destination: ResultView()) {
                         Text("Join this Game!")
                             .font(.system(size: 50))
                     }
