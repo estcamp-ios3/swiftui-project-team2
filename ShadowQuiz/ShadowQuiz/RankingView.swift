@@ -6,11 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     
     @State private var selectedSubjectDefult: String = "Pokémon"
+    
+    @Query var ranking: [Rank] = [
+        Rank(nickName: "MIDKING", score: 300),
+        Rank(nickName: "JUGKING", score: 270),
+        Rank(nickName: "hide on bush", score: 200),
+        Rank(nickName: "CJ CloudTempler", score: 180),
+        Rank(nickName: "beamman", score: 100),
+    ]
     
     var body: some View {
         ZStack {
@@ -43,7 +52,7 @@ struct RankingView: View {
                 }
                 .padding(.horizontal, 16)
 
-                Grid{
+                LazyVGrid(columns: , count: 3)){
                     GridRow{
                         Text("Rank")
                         Text("Nickname")
@@ -51,30 +60,12 @@ struct RankingView: View {
                     }
                     .padding()
                     
-                    GridRow{
-                        Text("🥇")
-                        Text("MIDKING")
-                        Text("300")
-                    }
-                    GridRow{
-                        Text("🥈")
-                        Text("JUGKING")
-                        Text("270")
-                    }
-                    GridRow{
-                        Text("🥉")
-                        Text("hide on bush")
-                        Text("200")
-                    }
-                    GridRow{
-                        Text("4")
-                        Text("CJ CloudTempler")
-                        Text("180")
-                    }
-                    GridRow{
-                        Text("5")
-                        Text("beamman")
-                        Text("100")
+                    ForEach(ranking){ rank in
+                        HStack{
+                                Text("🥇")
+                                Text(rank.nickName)
+                                Text("\(rank.score)")
+                            }
                     }
                 }
                 Text("If you want to leave your name, be stronger.")
