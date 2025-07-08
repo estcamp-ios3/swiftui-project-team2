@@ -7,9 +7,18 @@
 
 import SwiftUI
 import SwiftData
-
+ 
 @Model
-class Rank {
-    @Attribute(.unique) var nickName: String
-    var score: Int?
+class Post {
+  @Attribute(.unique) var id: UUID
+  var nickName: String
+  var score: Int
+  var createdAt: Date
+  
+  init(id: UUID = UUID(), nickName: String, score: Int) {
+    self.id = id
+    self.nickName = nickName
+    self.score = score
+    self.createdAt = Date.now
+  }
 }
