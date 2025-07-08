@@ -10,6 +10,7 @@ import SwiftData
 
 struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     @State private var selectedSubjectDefult: String = "Pokémon"
     
@@ -51,21 +52,19 @@ struct RankingView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-
-                LazyVGrid(columns: <#T##[GridItem]#>)){
-                    GridRow{
-                        Text("Rank")
-                        Text("Nickname")
-                        Text("Score")
-                    }
-                    .padding()
+                
+                LazyVGrid(columns: columns){
+                    //                    GridRow{
+                    //                        Text("Rank")
+                    //                        Text("Nickname")
+                    //                        Text("Score")
+                    //                    }
+                    //                    .padding()
                     
-                    ForEach(ranking){ rank in
-                        HStack{
-                                Text("🥇")
-                                Text(rank.nickName)
-                                Text("\(rank.score)")
-                            }
+                    ForEach(ranking, id: \.self){ rank in
+                        Text("🥇")
+                        Text(rank.nickName)
+                        Text("\(rank.score)")
                     }
                 }
                 Text("If you want to leave your name, be stronger.")
