@@ -1,0 +1,220 @@
+//
+//  MainView.swift
+//  ShadowQuiz
+//
+//  Created by 유재환 on 7/7/25.
+//
+
+import SwiftUI
+import SwiftData
+
+@Model
+class GamePlay {
+    var level: String // 난이도 프로퍼티
+    var topic: String // 주제 프로퍼티
+    
+    // 초기화
+    init(level: String, topic: String) {
+        self.level = level
+        self.topic = topic
+    }
+}
+
+@Model
+class Ranking {
+    @Attribute(.unique) var id: UUID = UUID()
+    var nickName: String
+    var score: Int
+    
+    // 초기화
+    init(id: UUID = UUID(), nickName: String, score: Int) {
+        self.id = id
+        self.nickName = nickName
+        self.score = score
+    }
+}
+
+struct MainView: View {
+    
+    @Query var rankings: [Ranking]
+    
+    // SwiftData modelContext 가져오기
+    @Environment(\.modelContext) private var context
+    
+    @State var selectedLevelDefult: String = "하"
+    @State var selectedSubjectDefult: String = "포켓몬"
+    @State var navigateToGame: Bool = false
+    
+    // 랭킹 인덱스
+    @State private var scoreIndex: Int = 0
+    
+    // 랭킹 리스트
+    let rankList = [
+        "🥇 1위[닉네임] - 159점",
+        "🥈 2위[닉네임] - 140점",
+        "🥉 3위[닉네임] - 120점"
+    ]
+    
+
+    // 3초마다 타이머
+    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+    
+    // 배경 색상
+    let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
+    
+    var body: some View {
+        NavigationStack {
+            
+            ZStack {
+                backgroundColor.ignoresSafeArea()
+                
+                VStack(spacing: 40) {
+                    
+                    Spacer()
+                    
+                    Text("Shadow Quiz")
+                        .font(.system(size: 54, weight: .bold))
+                        .fontDesign(.rounded)
+                        .foregroundColor(Color.black.opacity(0.5))
+                    
+                    Spacer()
+                    
+                    // 난이도 선택 버튼
+                    HStack(spacing: 0) {
+                        ForEach(["상", "중", "하"], id: \.self) { level in
+                            Button {
+                                selectedLevelDefult = level
+                            } label: {
+                                Text(level)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                                    .background(
+                                        selectedLevelDefult == level
+                                        ? Color.white
+                                        : Color.black.opacity(0.5)
+                                    )
+                                    .foregroundColor(
+                                        selectedLevelDefult == level
+                                        ? Color.black
+                                        : Color.white
+                                    )
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    // 주제 선택 버튼
+                    HStack(spacing: 0) {
+                        ForEach(["사물", "포켓몬", "공룡", "동물"], id: \.self) { sub in
+                            Button {
+                                selectedSubjectDefult = sub
+                            } label: {
+                                Text(sub)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                                    .background(
+                                        selectedSubjectDefult == sub
+                                        ? Color.white
+                                        : Color.black.opacity(0.5)
+                                    )
+                                    .foregroundColor(
+                                        selectedSubjectDefult == sub
+                                        ? Color.black
+                                        : Color.white
+                                    )
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    Spacer()
+                    
+                    // START 버튼
+                    Button {
+                        saveGamePlay()
+                        navigateToGame = true
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 200, height: 200)
+                                .shadow(radius: 5)
+                            
+                            VStack(spacing: 10) {
+                                Text("START")
+                                    .foregroundColor(Color.black.opacity(0.5))
+                                    .bold()
+                                
+                                Image(systemName: "play.fill")
+                                    .foregroundColor(Color.black.opacity(0.5))
+                                    .font(.largeTitle)
+                            }
+                        }
+                        .padding(0)
+                    }
+                    
+                    Spacer()
+                    
+                    // 슬라이드 랭킹
+                    Text(rankList[scoreIndex])
+                        .font(.system(size: 21, weight: .bold))
+                        .fontDesign(.rounded)
+                        .foregroundColor(Color.black.opacity(0.5))
+                        .onReceive(timer) { _ in
+                            withAnimation {
+                                scoreIndex = (scoreIndex + 1) % max(rankList.count, 1)
+                            }
+                        }
+                    
+                    Spacer()
+                }
+                
+                // 난이도,주제 데이터를 담아 view 이동
+                .navigationDestination(isPresented: $navigateToGame) {
+                    // GamePlayView(level: selectedLevelDefult, topic: selectedSubjectDefult)
+                    GameView(level: selectedLevelDefult, topic: selectedSubjectDefult)
+                }
+                
+            }
+//            .onAppear {
+//                printRankings()
+//            }
+        }
+    }
+    
+//    func printRankings() {
+//        if rankings.isEmpty {
+//            print("저장된 랭킹이 없습니다.")
+//        } else {
+//            print("현재 랭킹 목록:")
+//            for (index, rank) in rankings.enumerated() {
+//                print("\(index + 1). \(rank.nickName) - \(rank.score)점 (id: \(rank.id))")
+//            }
+//        }
+//    }
+
+    func saveGamePlay() {
+        // 선택된 난이도, 주제 GamePlay 인스턴스 생성
+        let game = GamePlay(level: selectedLevelDefult, topic: selectedSubjectDefult)
+        // 데이터 컨텍스트에 insert
+        context.insert(game)
+    }
+}
+// 임시 생성
+struct GameView: View {
+    var level: String
+    var topic: String
+
+    var body: some View {
+        VStack() {
+            Text("난이도: \(level)")
+            Text("주제: \(topic)")
+        }
+    }
+}
+
+
+
+#Preview {
+    MainView()
+}
