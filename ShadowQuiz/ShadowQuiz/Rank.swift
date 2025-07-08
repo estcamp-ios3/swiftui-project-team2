@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
  
 @Model
-class Post {
+class Rank {
   @Attribute(.unique) var id: UUID
   var nickName: String
   var score: Int
