@@ -22,7 +22,7 @@ struct GamePlayView: View {
     @State private var showHint = false
     @State private var showFinalResult = false
     @State private var timer: Timer?
-    @State var score: Int = 0
+    @State private var score: Int = 0 // 점수 상태
     @State var life: Int = 3
     
     var timeLimit: Int {
@@ -48,10 +48,10 @@ struct GamePlayView: View {
     @State var lives: String = "❤️❤️❤️"
     
     @State var timeRemaining: Int = 0
-    @State var timerStarted = false // ✅ 중복 방지용
+    @State var timerStarted = false
     
     func startTimer(duration: Int, onTimeUp: @escaping () -> Void) {
-        guard !timerStarted else { return } // ✅ 이미 시작했다면 무시
+        guard !timerStarted else { return }
         timeRemaining = duration
         timerStarted = true
         
@@ -67,12 +67,43 @@ struct GamePlayView: View {
         }
     }
     
+    // 정답 제출 처리
+    func handleAnswerSubmission(correctAnswer: String) {
+        if userAnswer == correctAnswer {
+            isCorrect = true
+            score += scorePerQuestion
+        } else {
+            isCorrect = false
+            if life > 0 {
+                life -= 1
+            }
+        }
+        
+        // 라이프가 0이 되면 결과 화면으로
+        if life <= 0 {
+            showFinalResult = true
+        }
+        
+        // 라이프 상태 업데이트
+        switch life {
+        case 1:
+            lives = heart + brokenHeart + brokenHeart
+        case 2:
+            lives = heart + heart + brokenHeart
+        case 0:
+            lives = brokenHeart + brokenHeart + brokenHeart
+            showFinalResult = true
+        default:
+            lives = heart + heart + heart
+        }
+        showResult = true
+    }
+    
     func stopTimer() {
         timer?.invalidate()
         timer = nil
         timerStarted = false
     }
-    
     
     var body: some View {
         NavigationStack {
@@ -85,7 +116,7 @@ struct GamePlayView: View {
                     ScrollView {
                         VStack(spacing: 30) {
                             HStack {
-                                Text("⏱ 남은 시간: \(timeLimit)초")
+                                Text("⏱ 남은 시간: \(timeRemaining)초")
                                     .bold()
                                 Spacer()
                                 Text("LIFE:")
@@ -102,8 +133,10 @@ struct GamePlayView: View {
                                 .frame(height: 250)
                             
                             TextField("정답을 입력하세요", text: $userAnswer)
+                                .font(.system(size: 40))
                                 .textFieldStyle(.roundedBorder)
-                                .padding(.horizontal)
+                                .frame(height: 10)
+                                .padding(.horizontal, 20)
                             
                             HStack(spacing: 15) {
                                 Button("힌트") {
@@ -124,13 +157,15 @@ struct GamePlayView: View {
                                 
                                 Button("정답 제출") {
                                     handleAnswerSubmission(correctAnswer: current.answer)
+                                    print(score)
                                 }
                                 .buttonStyle(.borderedProminent)
                             }
                             
-                            Button("끗"){
+                            Button("게임종료") {
                                 showFinalResult = true
                             }
+                            .buttonStyle(.bordered)
                             
                             if showHint {
                                 Text("힌트: \(current.hint)")
@@ -141,69 +176,49 @@ struct GamePlayView: View {
                     }
                 }
             }
+            
+            // navigationDestination을 한 번만 사용하고, showResult와 showFinalResult에 따라 조건을 분리하여 처리
             .navigationDestination(isPresented: $showResult) {
                 if currentIndex < quizItem.count {
-                    let current = quizItem[currentIndex]
                     AnswerResultView(
+                        score: score,  // 단순 값으로 전달
                         isCorrect: isCorrect,
-                        correctImageName: current.answerImageName,
-                        score: score,
-                        correctText: current.answer,
+                        correctImageName: quizItem[currentIndex].answerImageName,
+                        correctText: quizItem[currentIndex].answer,
                         selectedLevelDefult: difficulty,
                         selectedSubjectDefult: selectedSubject
                     )
                 }
             }
             
+            // ResultView로 점수만 전달
             .navigationDestination(isPresented: $showFinalResult) {
-                ResultView(subject: selectedSubject)
+                
+                ResultView(score: score, subject: selectedSubject ) // 점수만 전달
+            }
+        }
+        .onAppear {
+            if quizItem.isEmpty {
+                switch selectedSubject {
+                case "포켓몬": quizItem = pkmQuizList.shuffled()
+                case "공룡": quizItem = dinoQuizList.shuffled()
+                case "사물": quizItem = thingQuizList.shuffled()
+                case "동물": quizItem = animalQuizList.shuffled()
+                default: quizItem = pkmQuizList.shuffled()
+                }
             }
             
-            .onAppear {
-                if quizItem.isEmpty {
-                    switch selectedSubject {
-                    case "포켓몬": quizItem = pkmQuizList.shuffled()
-                    case "공룡": quizItem = dinoQuizList.shuffled()
-                    case "사물": quizItem = thingQuizList.shuffled()
-                    case "동물": quizItem = animalQuizList.shuffled()
-                    default: quizItem = pkmQuizList.shuffled()
-                    }
-                }
-                
-                // ✅ 타이머는 최초 1회만 시작됨
+            // 타이머는 최초 1회만 시작됨
+            if !timerStarted {
                 startTimer(duration: timeLimit) {
                     showFinalResult = true
                 }
             }
-            
-            .onDisappear {
-                timer?.invalidate()
-            }
         }
-    }
-    
-    // MARK: - 정답 제출 처리
-    func handleAnswerSubmission(correctAnswer: String) {
-        if userAnswer == correctAnswer {
-            isCorrect = true
-            score += scorePerQuestion
-        } else {
-            isCorrect = false
-            if life > 0 {
-                life -= 1
-            }
+        .onDisappear {
+            timer?.invalidate()
         }
-        switch life{
-        case 1:
-            lives = heart + brokenHeart + brokenHeart
-        case 2:
-            lives = heart + heart + brokenHeart
-        case 0 :
-            showFinalResult = true
-        default:
-            lives = heart + heart + heart
-        }
-        showResult = true
+        .navigationBarBackButtonHidden(true)
     }
 }
 
