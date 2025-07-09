@@ -12,15 +12,12 @@ struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     @State var numberOfRank: Int = 1
     
-    @State private var selectedSubject: String = "Pokémon"
+    @State var selectedSubject: String
     
-    var ranking: [Rank] = [
-        Rank(nickName: "MIDKING", score: 300),
-        Rank(nickName: "JUGKING", score: 80),
-        Rank(nickName: "hide on bush", score: 200),
-        Rank(nickName: "CJ CloudTempler", score: 180),
-        Rank(nickName: "beamman", score: 100),
-    ].sorted { $0.score > $1.score }
+    @Query var rankings: [Rank]
+    var sortedRankings: [Rank] {
+        rankings.sorted { $0.score > $1.score }
+    }
     
     var body: some View {
         ZStack {
@@ -32,7 +29,7 @@ struct RankingView: View {
                     .font(.largeTitle)
                     .padding()
                 HStack(spacing: 0) {
-                    ForEach(["Pokémon", "Dinosaur", "Animal", "Things"], id: \.self) { sub in
+                    ForEach(["포켓몬", "공룡", "동물", "사물"], id: \.self) { sub in
                         Button {
                             selectedSubject = sub
                         } label: {
@@ -62,12 +59,12 @@ struct RankingView: View {
                     }
                     .padding()
                     
-                    ForEach(ranking, id: \.id) { rank in
+                    ForEach(sortedRankings, id: \.id) { rank in
                         GridRow{
                             Text(
-                                ranking.firstIndex(of: rank)! == 0
+                                sortedRankings.firstIndex(of: rank)! == 0
                                 ? "🥇"
-                                : "\(ranking.firstIndex(of: rank)! + 1)"
+                                : "\(sortedRankings.firstIndex(of: rank)! + 1)"
                             )
                             Text(rank.nickName)
                             Text("\(rank.score)")
@@ -95,5 +92,5 @@ struct RankingView: View {
 }
 
 #Preview {
-    RankingView()
+    RankingView(selectedSubject: "포켓몬")
 }
