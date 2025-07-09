@@ -9,18 +9,6 @@ import SwiftUI
 import SwiftData
 
 @Model
-class GamePlay {
-    var level: String // 난이도 프로퍼티
-    var topic: String // 주제 프로퍼티
-    
-    // 초기화
-    init(level: String, topic: String) {
-        self.level = level
-        self.topic = topic
-    }
-}
-
-@Model
 class Ranking {
     @Attribute(.unique) var id: UUID = UUID()
     var nickName: String
@@ -56,7 +44,7 @@ struct MainView: View {
     ]
     
 
-    // 3초마다 타이머
+    // 랭킹 슬라이드 3초마다 타이머
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     
     // 배경 색상
@@ -195,9 +183,9 @@ struct MainView: View {
 
     func saveGamePlay() {
         // 선택된 난이도, 주제 GamePlay 인스턴스 생성
-        let game = GamePlay(level: selectedLevelDefult, topic: selectedSubjectDefult)
+        let gameSet = GameSettings(level: selectedLevelDefult, topic: selectedSubjectDefult)
         // 데이터 컨텍스트에 insert
-        context.insert(game)
+        context.insert(gameSet)
     }
 }
 // 임시 생성
