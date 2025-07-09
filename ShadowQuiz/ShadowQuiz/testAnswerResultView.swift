@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct testAnswerResultView: View {
+    
+    //01. 전달받는 값(매개변수들)
     let score: Int
     let isCorrect: Bool
     let correctImageName: String
@@ -15,6 +17,7 @@ struct testAnswerResultView: View {
     let selectedLevelDefult: String
     let selectedSubjectDefult: String
 
+    //02. 콜백함수 (버튼 누르면 실행됨) 아래 함수들은 testgameplayview에서 정의되어서 이 뷰로 전달됨.
     let onNext: () -> Void
     let onFinish: () -> Void
 
