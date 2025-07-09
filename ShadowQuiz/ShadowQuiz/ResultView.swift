@@ -80,22 +80,23 @@ struct ResultView: View {
                         NavigationLink(destination: MainView()) {
                             Rectangle()
                                 .fill(Color.black.opacity(0.2))
-                                .frame(width: 150, height: 50)
+                                .frame(width: 160, height: 50)
                                 .overlay(Text("HOME")
                                     .foregroundStyle(.white)
-                                    .font(.largeTitle))
+                                    .font(.system(size: 30)))
                         }
                         Spacer()
                         Rectangle()
-                            .frame(width: 1, height: 50)
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(width: 0.5, height: 60)
                         Spacer()
                         NavigationLink(destination: RankingView()) {
                             Rectangle()
                                 .fill(Color.black.opacity(0.2))
-                                .frame(width: 150, height: 50)
+                                .frame(width: 160, height: 50)
                                 .overlay(Text("RANKING")
                                     .foregroundStyle(.white)
-                                    .font(.largeTitle))
+                                    .font(.system(size: 30)))
                         }
                         Spacer()
                     }
@@ -115,6 +116,7 @@ struct ResultView: View {
                     } label: {
                         Text("Upload")
                             .font(.title3)
+                            .frame(width: 70, height: 0)
                             .padding()
                             .background(Color.black.opacity(0.3))
                             .foregroundStyle(.white)
