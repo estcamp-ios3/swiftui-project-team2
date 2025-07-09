@@ -34,7 +34,7 @@ struct ResultView: View {
         modelContext.insert(newRanking)
         do {
             try modelContext.save()
-            print("Success to save: \(newRanking.nickName), \(newRanking.score)")
+            print("Success to save: \(newRanking.nickName), \(newRanking.score), \(newRanking.subject)")
         } catch {
             print("Failed to save: \(error)")
         }
@@ -102,7 +102,7 @@ struct ResultView: View {
                         Rectangle()
                             .fill(Color.clear.opacity(0.2))
                             .frame(width: 0, height: 130)
-                        NavigationLink(destination: MainView()) {
+                        NavigationLink(destination: MainView().navigationBarBackButtonHidden(true)) {
                             Rectangle()
                                 .fill(Color.black.opacity(0.2))
                                 .frame(width: 160, height: 50)
@@ -113,7 +113,7 @@ struct ResultView: View {
                         Rectangle()
                             .fill(Color.gray.opacity(0.5))
                             .frame(width: 170, height: 0.5)
-                        NavigationLink(destination: RankingView(selectedSubject: subject)) {
+                        NavigationLink(destination: RankingView(selectedSubject: subject).navigationBarBackButtonHidden(true)) {
                             Rectangle()
                                 .fill(Color.black.opacity(0.2))
                                 .frame(width: 160, height: 50)
@@ -126,7 +126,7 @@ struct ResultView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToRanking) {
-                RankingView(selectedSubject: "포켓몬")
+                RankingView(selectedSubject: "포켓몬").navigationBarBackButtonHidden(true)
             }
         }
     }
