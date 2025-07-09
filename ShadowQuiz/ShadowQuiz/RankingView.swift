@@ -27,6 +27,7 @@ struct RankingView: View {
             backgroundColor.ignoresSafeArea()
             VStack{
                 Text("RANKING")
+                    .bold(true)
                     .foregroundStyle(Color.black.opacity(0.5))
                     .font(.largeTitle)
                     .padding()
@@ -59,7 +60,7 @@ struct RankingView: View {
                         Text("Nickname")
                         Text("Score")
                     }
-                    .padding(.vertical)
+                    .padding()
                     
                     ForEach(ranking, id: \.id) { rank in
                         GridRow{
@@ -72,14 +73,15 @@ struct RankingView: View {
                             Text("\(rank.score)")
                         }
                         .font(.title)
-                        .padding(.bottom)
+                        Divider()
+                            .padding(.horizontal)
                     }
                 }
-                .padding(.horizontal)
                 .bold(true)
-                .background(Color.white)
+                .background(Color.white.opacity(0.5))
                 
-                Text("If you want to leave your name here, be stronger.")
+                Text("If you want to leave your name here,\nBE STRONGER.")
+                    .multilineTextAlignment(.center)
                     .padding()
                 Button("Home"){
                     
