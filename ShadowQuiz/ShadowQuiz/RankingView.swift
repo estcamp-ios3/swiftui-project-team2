@@ -59,7 +59,7 @@ struct RankingView: View {
                         Text("Nickname")
                         Text("Score")
                     }
-                    .padding()
+                    .padding(.vertical)
                     
                     ForEach(ranking, id: \.id) { rank in
                         GridRow{
@@ -71,11 +71,15 @@ struct RankingView: View {
                             Text(rank.nickName)
                             Text("\(rank.score)")
                         }
-                        .padding()
+                        .font(.title)
+                        .padding(.bottom)
                     }
                 }
+                .padding(.horizontal)
+                .bold(true)
+                .background(Color.white)
                 
-                Text("If you want to leave your name, be stronger.")
+                Text("If you want to leave your name here, be stronger.")
                     .padding()
                 Button("Home"){
                     
