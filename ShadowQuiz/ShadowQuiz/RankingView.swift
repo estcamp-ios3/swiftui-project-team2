@@ -11,12 +11,13 @@ import SwiftData
 struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    @State var numberOfRank: Int = 1
     
     @State private var selectedSubjectDefult: String = "Pokémon"
     
-    @Query var ranking: [Rank] = [
+    var ranking: [Rank] = [
         Rank(nickName: "MIDKING", score: 300),
-        Rank(nickName: "JUGKING", score: 270),
+        Rank(nickName: "JUGKING", score: 80),
         Rank(nickName: "hide on bush", score: 200),
         Rank(nickName: "CJ CloudTempler", score: 180),
         Rank(nickName: "beamman", score: 100),
@@ -52,6 +53,25 @@ struct RankingView: View {
                     }
                 }
                 .padding(.horizontal, 16)
+                
+                Grid{
+                    GridRow{
+                        Text("RANK")
+                        Text("Nickname")
+                        Text("Score")
+                    }
+                    .padding()
+                    
+                    ForEach(ranking.sorted { $0.score > $1.score }, id: \.id) { rank in
+                        GridRow{
+                            Text("No. \(ranking.firstIndex(of: rank)! + 1)")
+                            Text(rank.nickName)
+                            Text("\(rank.score)")
+                        }
+                        .padding()
+                        .background(Color.white)
+                    }
+                }
                 
                 Text("If you want to leave your name, be stronger.")
                     .padding()
