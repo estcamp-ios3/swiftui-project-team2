@@ -136,4 +136,3 @@ struct ResultView: View {
 #Preview {
     ResultView(subject: "포켓몬")
 }
-
