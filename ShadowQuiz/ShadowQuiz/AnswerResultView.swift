@@ -12,33 +12,39 @@ struct AnswerResultView: View {
     let correctImageName: String
     let score: Int
     let correctText: String
-    let onNext: () -> Void
-    let gameState: GameState  // 필요시 사용
-
+    let selectedLevelDefult: String
+    let selectedSubjectDefult: String
+    @State var isPresented = false
+    
     var body: some View {
-        ZStack {
-            Color(hex: "#CBEFB9").opacity(0.5)
-                .ignoresSafeArea()
-
-            VStack(spacing: 20) {
-                Text(isCorrect ? "정답입니다!" : "오답입니다.")
-                    .font(.title)
-                    .foregroundColor(isCorrect ? .green : .red)
-
-                Image(correctImageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 250)
-
-                Text("정답: \(correctText)")
-                    .font(.title2)
-
-                Button("다음 문제") {
-                    onNext()
+        NavigationStack{
+            ZStack {
+                Color(hex: "#CBEFB9")
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
+                    Text(isCorrect ? "정답입니다!" : "오답입니다.")
+                        .font(.title)
+                        .foregroundColor(isCorrect ? .green : .red)
+                    
+                    Image(correctImageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 250)
+                    
+                    Text("정답: \(correctText)")
+                        .font(.title2)
+                    
+                    Button("다음 문제"){
+                        isPresented = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .navigationDestination(isPresented: $isPresented){
+                        GamePlayView(difficulty: selectedLevelDefult, selectedSubject: selectedSubjectDefult)
+                    }
                 }
-                .buttonStyle(.borderedProminent)
+                .padding()
             }
-            .padding()
         }
     }
 }
