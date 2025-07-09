@@ -12,9 +12,30 @@ struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     @State var numberOfRank: Int = 1
     
-    @State private var selectedSubjectDefult: String = "Pokémon"
+    @State private var selectedSubject: String = "Pokémon"
     
-    var ranking: [Rank] = [
+    var rankingForPokemon: [Rank] = [
+        Rank(nickName: "MIDKING", score: 300),
+        Rank(nickName: "JUGKING", score: 80),
+        Rank(nickName: "hide on bush", score: 200),
+        Rank(nickName: "CJ CloudTempler", score: 180),
+        Rank(nickName: "beamman", score: 100),
+    ]
+    var rankingForDino: [Rank] = [
+        Rank(nickName: "MIDKING", score: 300),
+        Rank(nickName: "JUGKING", score: 80),
+        Rank(nickName: "hide on bush", score: 200),
+        Rank(nickName: "CJ CloudTempler", score: 180),
+        Rank(nickName: "beamman", score: 100),
+    ]
+    var rankingForAnimals: [Rank] = [
+        Rank(nickName: "MIDKING", score: 300),
+        Rank(nickName: "JUGKING", score: 80),
+        Rank(nickName: "hide on bush", score: 200),
+        Rank(nickName: "CJ CloudTempler", score: 180),
+        Rank(nickName: "beamman", score: 100),
+    ]
+    var rankingForThings: [Rank] = [
         Rank(nickName: "MIDKING", score: 300),
         Rank(nickName: "JUGKING", score: 80),
         Rank(nickName: "hide on bush", score: 200),
@@ -33,18 +54,18 @@ struct RankingView: View {
                 HStack(spacing: 0) {
                     ForEach(["Pokémon", "Dinosaur", "Animal", "Things"], id: \.self) { sub in
                         Button {
-                            selectedSubjectDefult = sub
+                            selectedSubject = sub
                         } label: {
                             Text(sub)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 8)
                                 .background(
-                                    selectedSubjectDefult == sub
+                                    selectedSubject == sub
                                     ? Color.white
                                     : Color.black.opacity(0.5)
                                 )
                                 .foregroundColor(
-                                    selectedSubjectDefult == sub
+                                    selectedSubject == sub
                                     ? Color.black
                                     : Color.white
                                 )
@@ -61,9 +82,9 @@ struct RankingView: View {
                     }
                     .padding()
                     
-                    ForEach(ranking.sorted { $0.score > $1.score }, id: \.id) { rank in
+                    ForEach(rankingForPokemon.sorted { $0.score > $1.score }, id: \.id) { rank in
                         GridRow{
-                            Text("No. \(ranking.firstIndex(of: rank)! + 1)")
+                            Text("No. \(rank.firstIndex(of: rank)! + 1)")
                             Text(rank.nickName)
                             Text("\(rank.score)")
                         }
