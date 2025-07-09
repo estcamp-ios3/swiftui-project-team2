@@ -33,6 +33,7 @@ struct ResultView: View {
         modelContext.insert(newRanking)
         do {
             try modelContext.save()
+            print("Succese to save: \(newRanking.nickName), \(newRanking.score)")
         } catch {
             print("Failed to save: \(error)")
         }
