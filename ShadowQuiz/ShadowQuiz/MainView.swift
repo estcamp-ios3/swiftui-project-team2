@@ -8,23 +8,9 @@
 import SwiftUI
 import SwiftData
 
-@Model
-class Ranking {
-    @Attribute(.unique) var id: UUID = UUID()
-    var nickName: String
-    var score: Int
-    
-    // 초기화
-    init(id: UUID = UUID(), nickName: String, score: Int) {
-        self.id = id
-        self.nickName = nickName
-        self.score = score
-    }
-}
-
 struct MainView: View {
     
-    @Query var rankings: [Ranking]
+    @Query var rankings: [Rank]
     
     // SwiftData modelContext 가져오기
     @Environment(\.modelContext) private var context
@@ -159,8 +145,8 @@ struct MainView: View {
                 
                 // 난이도,주제 데이터를 담아 view 이동
                 .navigationDestination(isPresented: $navigateToGame) {
-                    // GamePlayView(level: selectedLevelDefult, topic: selectedSubjectDefult)
-                    GameView(level: selectedLevelDefult, topic: selectedSubjectDefult)
+                    GamePlayView(difficulty: selectedLevelDefult, selectedSubject: selectedSubjectDefult)
+//                    GameView(level: selectedLevelDefult, topic: selectedSubjectDefult)
                 }
                 
             }

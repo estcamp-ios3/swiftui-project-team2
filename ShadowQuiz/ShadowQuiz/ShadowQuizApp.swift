@@ -13,6 +13,6 @@ struct ShadowQuizApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Ranking.self)
+        .modelContainer(for: Rank.self)
     }
 }

@@ -10,9 +10,10 @@ import SwiftData
 
 struct ResultView: View {
     
-    @Query var rankings: [Ranking]
+    @Query var rankings: [Rank]
     @State private var nickName: String = ""
     @State private var score: Int = 0
+    @State var subject: String
     @State private var navigateToRanking = false
     @Environment(\.modelContext) private var modelContext
     
@@ -29,7 +30,7 @@ struct ResultView: View {
     
     
     func insertRanking() {
-        let newRanking = Ranking(nickName: nickName, score: score)
+        let newRanking = Rank(nickName: nickName, score: score, subject: subject)
         modelContext.insert(newRanking)
         do {
             try modelContext.save()
@@ -90,7 +91,7 @@ struct ResultView: View {
                             .fill(Color.gray.opacity(0.5))
                             .frame(width: 0.5, height: 60)
                         Spacer()
-                        NavigationLink(destination: RankingView()) {
+                        NavigationLink(destination: RankingView(selectedSubject: subject)) {
                             Rectangle()
                                 .fill(Color.black.opacity(0.2))
                                 .frame(width: 160, height: 50)
@@ -126,7 +127,7 @@ struct ResultView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToRanking) {
-                RankingView()
+                RankingView(selectedSubject: "포켓몬")
             }
         }
     }
@@ -134,5 +135,5 @@ struct ResultView: View {
 
 
 #Preview {
-    ResultView()
+    ResultView(subject: "포켓몬")
 }
