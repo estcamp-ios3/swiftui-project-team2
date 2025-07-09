@@ -26,6 +26,7 @@ struct MainView: View {
     var rankList: [String] {
         let top3 = rankings
             .sorted { $0.score > $1.score }
+            .prefix(3) // 에러로 추가한 부분
         
         let medals = ["🥇", "🥈", "🥉"]
         

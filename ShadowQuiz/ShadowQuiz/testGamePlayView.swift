@@ -10,10 +10,12 @@ import SwiftUI
 import Foundation
 import Combine
 
+//01. 화면 구조와 입력값
 struct testGamePlayView: View {
     let difficulty: String
     let selectedSubject: String
 
+    //02. 주요 상태 변수
     @State private var quizItem: [QuizItem] = []
     @State private var currentIndex = 0
     @State private var userAnswer = ""
@@ -25,6 +27,7 @@ struct testGamePlayView: View {
     @State private var score: Int = 0
     @State var life: Int = 3
 
+    //03-1. 난이도에 따른 시간 설정
     var timeLimit: Int {
         switch difficulty {
         case "하": return 180
@@ -34,6 +37,7 @@ struct testGamePlayView: View {
         }
     }
 
+    //03-2. 난이도에 따른 점수 설정
     var scorePerQuestion: Int {
         switch difficulty {
         case "하": return 10
@@ -43,6 +47,7 @@ struct testGamePlayView: View {
         }
     }
 
+    //04. 하트 표시용 문자열 변수
     @State var heart: String = "❤️"
     @State var brokenHeart: String = "💔"
     @State var lives: String = "❤️❤️❤️"
@@ -50,6 +55,7 @@ struct testGamePlayView: View {
     @State var timeRemaining: Int = 0
     @State var timerStarted = false
 
+    //05. 타이머 함수
     func startTimer(duration: Int, onTimeUp: @escaping () -> Void) {
         guard !timerStarted else { return }
         timeRemaining = duration
@@ -67,6 +73,7 @@ struct testGamePlayView: View {
         }
     }
 
+    //06. 정답 제출 함수
     func handleAnswerSubmission(correctAnswer: String) {
         if userAnswer == correctAnswer {
             isCorrect = true
@@ -107,16 +114,19 @@ struct testGamePlayView: View {
             ZStack {
                 Color(hex: "#CBEFB9").ignoresSafeArea()
 
+                // 조건 분기 로직
+                // showResult=true ->
                 if showResult {
                     if currentIndex < quizItem.count {
                         AnswerResultView(
-                            score: score,
-                            isCorrect: isCorrect,
-                            correctImageName: quizItem[currentIndex].answerImageName,
-                            correctText: quizItem[currentIndex].answer,
-                            selectedLevelDefult: difficulty,
-                            selectedSubjectDefult: selectedSubject,
-                            onNext: {
+                            //정답 결과 화면으로 이동
+                            score: score, //현재 누적점수
+                            isCorrect: isCorrect, // 답이 맞았나 틀렸나
+                            correctImageName: quizItem[currentIndex].answerImageName,//정답 이미지
+                            correctText: quizItem[currentIndex].answer, //정답 텍스트
+                            selectedLevelDefult: difficulty, //선택한 난이도
+                            selectedSubjectDefult: selectedSubject, //선택한 주제
+                            onNext: { //"다음 문제" 버튼 누를때 실행할 로직
                                 showResult = false
                                 if currentIndex + 1 < quizItem.count {
                                     currentIndex += 1
@@ -126,7 +136,7 @@ struct testGamePlayView: View {
                                 userAnswer = ""
                                 showHint = false
                             },
-                            onFinish: {
+                            onFinish: { // " 게임종료" 버튼을 누를때 실행할 로직
                                 showResult = false
                                 showFinalResult = true
                             }
@@ -185,6 +195,8 @@ struct testGamePlayView: View {
                 ResultView(score: score, subject: selectedSubject)
             }
         }
+        // onAppear는 뷰가 화면에 처음 보일때 실행되는 코드다.
+        // 아래 코드는 퀴즈 데이터를 주제별로 가져옴. 그리고 타이머 시작
         .onAppear {
             if quizItem.isEmpty {
                 switch selectedSubject {
@@ -201,6 +213,7 @@ struct testGamePlayView: View {
                 }
             }
         }
+        // onDisappear는 뷰가 화면에 사라질때 실행되는 코드다.
         .onDisappear {
             timer?.invalidate()
         }
