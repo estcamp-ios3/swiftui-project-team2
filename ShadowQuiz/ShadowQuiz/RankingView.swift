@@ -32,7 +32,7 @@ struct RankingView: View {
                         GridRow{
                             VStack {
                                 Text("순위")
-                                Text("(주제)")
+                                Text("(주제)").font(.caption)
                             }
                             Text("닉네임")
                             Text("점수")
@@ -45,9 +45,9 @@ struct RankingView: View {
                                     Text(
                                         sortedRankings.firstIndex(of: rank)! == 0
                                         ? "🥇"
-                                        : "\(sortedRankings.firstIndex(of: rank)! + 1)"
+                                        : "\(sortedRankings.firstIndex(of: rank)! + 1)위"
                                     )
-                                    Text("(\(rank.subject))")
+                                    Text("(\(rank.subject))").font(.caption)
                                 }
                                 Text(rank.nickName).font(.title)
                                 Text("\(rank.score)").font(.title)
@@ -70,7 +70,6 @@ struct RankingView: View {
                     .foregroundStyle(.white)
                     .frame(width: 200, height: 50)
                     .background(Color.black.opacity(0.5))
-                    
                 }
             }
         }
