@@ -91,7 +91,7 @@ struct ResultView: View {
                             .fill(Color.gray.opacity(0.5))
                             .frame(width: 0.5, height: 60)
                         Spacer()
-                        NavigationLink(destination: RankingView(selectedSubject: subject)) {
+                        NavigationLink(destination: RankingView()) {
                             Rectangle()
                                 .fill(Color.black.opacity(0.2))
                                 .frame(width: 160, height: 50)
@@ -127,7 +127,7 @@ struct ResultView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToRanking) {
-                RankingView(selectedSubject: "포켓몬")
+                RankingView()
             }
         }
     }
