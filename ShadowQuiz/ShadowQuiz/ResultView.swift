@@ -5,7 +5,7 @@
 //  Created by jonghyuck on 7/7/25.
 //
 
-iimport SwiftUI
+import SwiftUI
 import SwiftData
 
 struct ResultView: View {
