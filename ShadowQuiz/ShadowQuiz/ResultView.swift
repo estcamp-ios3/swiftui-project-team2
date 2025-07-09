@@ -113,7 +113,7 @@ struct ResultView: View {
                             Rectangle()
                                 .fill(Color.gray.opacity(0.5))
                                 .frame(width: 170, height: 0.5)
-                            NavigationLink(destination: RankingView(selectedSubject: subject).navigationBarBackButtonHidden(true)) {
+                            NavigationLink(destination: RankingView().navigationBarBackButtonHidden(true)) {
                                 Rectangle()
                                     .fill(Color.black.opacity(0.2))
                                     .frame(width: 160, height: 50)
@@ -126,7 +126,7 @@ struct ResultView: View {
                     }
                 }
                 .navigationDestination(isPresented: $navigateToRanking) {
-                    RankingView(selectedSubject: "포켓몬").navigationBarBackButtonHidden(true)
+                    RankingView().navigationBarBackButtonHidden(true)
                 }
             }
         }
