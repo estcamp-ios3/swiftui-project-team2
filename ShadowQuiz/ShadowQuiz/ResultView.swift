@@ -5,7 +5,7 @@
 //  Created by jonghyuck on 7/7/25.
 //
 
-import SwiftUI
+iimport SwiftUI
 import SwiftData
 
 struct ResultView: View {
@@ -136,3 +136,4 @@ struct ResultView: View {
 #Preview {
     ResultView(subject: "포켓몬")
 }
+
