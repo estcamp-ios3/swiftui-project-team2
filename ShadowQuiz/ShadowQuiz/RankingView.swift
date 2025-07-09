@@ -10,7 +10,6 @@ import SwiftData
 
 struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
-    let columns = [GridItem(.flexible()), GridItem(.flexible())]
     @State var numberOfRank: Int = 1
     
     @State private var selectedSubjectDefult: String = "Pokémon"
