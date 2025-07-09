@@ -8,10 +8,27 @@
 import SwiftUI
 import SwiftData
 
-struct ResultView: View {
+//@Model
+//class Ranking {
+//    @Attribute(.unique) var id: UUID = UUID()
+//    var nickName: String
+//    var score: Int
+//    
+//    // 초기화
+//    init(id: UUID = UUID(), nickName: String, score: Int) {
+//        self.id = id
+//        self.nickName = nickName
+//        self.score = score
+//    }
+//}
 
+struct ResultView: View {
+    
+    
     @State private var nickName: String = ""
     @State private var score: Int = 0
+    @State private var navigateToRanking = false
+
     
     var message: String {
         if score >= 150 {
@@ -23,61 +40,52 @@ struct ResultView: View {
         }
     }
     
-    @Model
-    class Result {
-        var userId: UUID
-        var score: Int
-//        var
-        init(id: UUID, score: Int) {
-            self.userId = id
-            self.score = score
+    @Environment(\.modelContext) private var modelContext
+    
+    func insertRanking() {
+        let newRanking = Ranking(nickName: nickName, score: score)
+        modelContext.insert(newRanking)
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save: \(error)")
         }
     }
-
-    
-    
-    
-    let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
-    
-    var body: some View {
-        NavigationStack {
-            ZStack{
-                backgroundColor.ignoresSafeArea()
-                VStack {
-                    Text("GAME RESULT")
-                        .padding()
-                        .font(.system(size: 50, weight: .bold))
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color.black.opacity(0.5))
-                    
-                    Text("Your Total Score is")
-                        .font(.system(size: 25, weight: .bold))
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color.black.opacity(0.7))
-                    
-                    Text("\(score)")
-                        .font(.system(size: 100, weight: .bold))
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color.black)
-                    
-                    if score >= 100 {
-                        Text(message)
-                            .font(.system(size: 45).bold())
-                    } else if score < 100 {
-                        NavigationLink(destination: MainView()) {
-                            Text("Try again🙁")
+        
+        
+        let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
+        
+        var body: some View {
+            NavigationStack {
+                ZStack{
+                    backgroundColor.ignoresSafeArea()
+                    VStack {
+                        Text("GAME RESULT")
+                            .padding()
+                            .font(.system(size: 50, weight: .bold))
+                            .fontDesign(.rounded)
+                            .foregroundColor(Color.black.opacity(0.5))
+                        
+                        Text("Your Total Score is")
+                            .font(.system(size: 25, weight: .bold))
+                            .fontDesign(.rounded)
+                            .foregroundColor(Color.black.opacity(0.7))
+                        
+                        Text("\(score)")
+                            .font(.system(size: 100, weight: .bold))
+                            .fontDesign(.rounded)
+                            .foregroundColor(Color.black)
+                        
+                        if score >= 100 {
+                            Text(message)
                                 .font(.system(size: 45).bold())
+                        } else if score < 100 {
+                            NavigationLink(destination: MainView()) {
+                                Text("Try again🙁")
+                                    .font(.system(size: 45).bold())
+                            }
                         }
-                    }
                         Divider()
-                    
-//                    TextField("Write your Nickname", text: $nickName)
-//                        .textFieldStyle(.roundedBorder)
-//                        .padding(.horizontal)
-//                    NavigationLink(destination: MainView()) {
-//                        Text("Upload")
-//                    }
-                    
                         Spacer()
                         HStack {
                             Spacer()
@@ -98,23 +106,33 @@ struct ResultView: View {
                                     .frame(width: 150, height: 100)
                                     .overlay(Text("Check the\nRANKING")
                                         .font(.largeTitle))
+                            }
+                            Spacer()
                         }
-                        Spacer()
                     }
-                }
-                VStack {
-                    TextField("Write your Nickname", text: $nickName)
-                        .textFieldStyle(.roundedBorder)
-                        .padding(.horizontal)
-                    
-                    NavigationLink(destination: RankingView()) {
-                        Text("Upload")
+                    VStack {
+                        TextField("Write your Nickname", text: $nickName)
+                            .textFieldStyle(.roundedBorder)
+                            .padding(.horizontal)
+                        
+                        Button {
+                            insertRanking()
+                            navigateToRanking = true
+                        } label: {
+                            Text("Upload")
+                        }
+
+                        NavigationLink(destination: RankingView(), isActive: $navigateToRanking) {
+                            EmptyView()
+                        }
                     }
                 }
             }
         }
     }
-}
+
+
+
 #Preview {
     ResultView()
 }
