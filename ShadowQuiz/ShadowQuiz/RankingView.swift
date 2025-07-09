@@ -6,24 +6,17 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
+    @State var numberOfRank: Int = 1
     
-    @State var isPokemonSelected: Bool = true
-    @State var isDinoSelected: Bool = false
-    @State var isAnimalsSelected: Bool = false
+    @State var selectedSubject: String
     
-    @State var selectedTextColor: Color = Color.black
-    @State var selectedBgColor: Color = Color.white
-    @State var unselectedTextColor: Color = Color.white
-    @State var unselectedBgColor: Color = Color.black.opacity(0.5)
-    
-    func btnPokemonPressed(){
-        isPokemonSelected = true
-        isDinoSelected = false
-        isAnimalsSelected = false
-        
+    @Query var rankings: [Rank]
+    var sortedRankings: [Rank] {
+        rankings.sorted { $0.score > $1.score }
     }
     
     var body: some View {
@@ -31,68 +24,61 @@ struct RankingView: View {
             backgroundColor.ignoresSafeArea()
             VStack{
                 Text("RANKING")
+                    .bold(true)
                     .foregroundStyle(Color.black.opacity(0.5))
                     .font(.largeTitle)
                     .padding()
-                HStack{
-                    Button("Pokémon"){
-                        btnPokemonPressed()
+                HStack(spacing: 0) {
+                    ForEach(["포켓몬", "공룡", "동물", "사물"], id: \.self) { sub in
+                        Button {
+                            selectedSubject = sub
+                        } label: {
+                            Text(sub)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                                .background(
+                                    selectedSubject == sub
+                                    ? Color.white
+                                    : Color.black.opacity(0.5)
+                                )
+                                .foregroundColor(
+                                    selectedSubject == sub
+                                    ? Color.black
+                                    : Color.white
+                                )
+                        }
                     }
-                    .foregroundStyle(selectedTextColor)
-                    .frame(width: 100, height: 50)
-                    .background(selectedBgColor)
-                    Button("Dinosaurs"){
-                        isPokemonSelected = false
-                        isDinoSelected = true
-                        isAnimalsSelected = false
-                    }
-                    .foregroundStyle(unselectedTextColor)
-                    .frame(width: 100, height: 50)
-                    .background(unselectedBgColor)
-                    Button("Animals"){
-                        isPokemonSelected = false
-                        isDinoSelected = false
-                        isAnimalsSelected = true
-                    }
-                    .foregroundStyle(unselectedTextColor)
-                    .frame(width: 100, height: 50)
-                    .background(unselectedBgColor)
                 }
+                .padding(.horizontal, 16)
+                
                 Grid{
                     GridRow{
-                        Text("Rank")
+                        Text("RANK")
                         Text("Nickname")
                         Text("Score")
                     }
                     .padding()
                     
-                    GridRow{
-                        Text("🥇")
-                        Text("MIDKING")
-                        Text("300")
-                    }
-                    GridRow{
-                        Text("🥈")
-                        Text("JUGKING")
-                        Text("270")
-                    }
-                    GridRow{
-                        Text("🥉")
-                        Text("hide on bush")
-                        Text("200")
-                    }
-                    GridRow{
-                        Text("4")
-                        Text("CJ CloudTempler")
-                        Text("180")
-                    }
-                    GridRow{
-                        Text("5")
-                        Text("beamman")
-                        Text("100")
+                    ForEach(sortedRankings, id: \.id) { rank in
+                        GridRow{
+                            Text(
+                                sortedRankings.firstIndex(of: rank)! == 0
+                                ? "🥇"
+                                : "\(sortedRankings.firstIndex(of: rank)! + 1)"
+                            )
+                            Text(rank.nickName)
+                            Text("\(rank.score)")
+                        }
+                        .font(.title)
+                        Divider()
+                            .padding(.horizontal)
                     }
                 }
-                Text("If you want to leave your name, be stronger.")
+                .bold(true)
+                .background(Color.white.opacity(0.5))
+                
+                Text("If you want to leave your name here,\nBE STRONGER.")
+                    .multilineTextAlignment(.center)
                     .padding()
                 Button("Home"){
                     
@@ -106,5 +92,5 @@ struct RankingView: View {
 }
 
 #Preview {
-    RankingView()
+    RankingView(selectedSubject: "포켓몬")
 }

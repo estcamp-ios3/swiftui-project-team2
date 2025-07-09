@@ -8,35 +8,9 @@
 import SwiftUI
 import SwiftData
 
-@Model
-class GamePlay {
-    var level: String // 난이도 프로퍼티
-    var topic: String // 주제 프로퍼티
-    
-    // 초기화
-    init(level: String, topic: String) {
-        self.level = level
-        self.topic = topic
-    }
-}
-
-@Model
-class Ranking {
-    @Attribute(.unique) var id: UUID = UUID()
-    var nickName: String
-    var score: Int
-    
-    // 초기화
-    init(id: UUID = UUID(), nickName: String, score: Int) {
-        self.id = id
-        self.nickName = nickName
-        self.score = score
-    }
-}
-
 struct MainView: View {
     
-    @Query var rankings: [Ranking]
+    @Query var rankings: [Rank]
     
     // SwiftData modelContext 가져오기
     @Environment(\.modelContext) private var context
@@ -56,7 +30,7 @@ struct MainView: View {
     ]
     
 
-    // 3초마다 타이머
+    // 랭킹 슬라이드 3초마다 타이머
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     
     // 배경 색상
@@ -171,8 +145,8 @@ struct MainView: View {
                 
                 // 난이도,주제 데이터를 담아 view 이동
                 .navigationDestination(isPresented: $navigateToGame) {
-                    // GamePlayView(level: selectedLevelDefult, topic: selectedSubjectDefult)
-                    GameView(level: selectedLevelDefult, topic: selectedSubjectDefult)
+                    GamePlayView(difficulty: selectedLevelDefult, selectedSubject: selectedSubjectDefult)
+//                    GameView(level: selectedLevelDefult, topic: selectedSubjectDefult)
                 }
                 
             }
@@ -195,9 +169,9 @@ struct MainView: View {
 
     func saveGamePlay() {
         // 선택된 난이도, 주제 GamePlay 인스턴스 생성
-        let game = GamePlay(level: selectedLevelDefult, topic: selectedSubjectDefult)
+        let gameSet = GameSettings(level: selectedLevelDefult, topic: selectedSubjectDefult)
         // 데이터 컨텍스트에 insert
-        context.insert(game)
+        context.insert(gameSet)
     }
 }
 // 임시 생성

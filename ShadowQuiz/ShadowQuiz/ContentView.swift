@@ -9,23 +9,8 @@ import SwiftUI
 
 
 struct ContentView: View {
-    var backGroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backGroundColor.ignoresSafeArea()
-                VStack {
-                    Image(systemName: "gamecontroller.fill")
-                        .imageScale(.large)
-                        .foregroundStyle(.tint)
-                    NavigationLink(destination: ResultView()) {
-                        Text("Join this Game!")
-                            .font(.system(size: 50))
-                    }
-                }
-                .padding()
-            }
-        }
+        MainView()
     }
 }
 
