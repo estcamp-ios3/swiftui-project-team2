@@ -46,3 +46,16 @@ let thingQuizList: [QuizItem] = [
     QuizItem(imageName: "thingshadow09", answerImageName: "thingimage09", answer: "면봉", hint: "ㅇㅇ", category: "사물"),
     QuizItem(imageName: "thingshadow10", answerImageName: "thingimage10", answer: "효자손", hint: "ㅇㅇㅇ", category: "사물"),
 ]
+
+let animalQuizList: [QuizItem] = [
+    QuizItem(imageName: "animalshadow01", answerImageName: "animalimage01", answer: "라마", hint: "ㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow02", answerImageName: "animalimage02", answer: "북극곰", hint: "ㅇㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow03", answerImageName: "animalimage03", answer: "사막여우", hint: "ㅇㅇㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow04", answerImageName: "animalimage04", answer: "사슴", hint: "ㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow05", answerImageName: "animalimage05", answer: "사자", hint: "ㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow06", answerImageName: "animalimage06", answer: "올빼미", hint: "ㅇㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow07", answerImageName: "animalimage07", answer: "캥거루", hint: "ㅇㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow08", answerImageName: "animalimage08", answer: "코끼리", hint: "ㅇㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow09", answerImageName: "animalimage09", answer: "홍학", hint: "ㅇㅇ", category: "동물"),
+    QuizItem(imageName: "animalshadow10", answerImageName: "animalimage10", answer: "고라니", hint: "ㅇㅇㅇ", category: "동물"),
+]

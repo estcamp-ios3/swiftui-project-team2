@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct QuizItem: Identifiable {
+struct QuizItem: Identifiable, Equatable {
     let id = UUID()
     let imageName: String // 실루엣 이미지
     let answerImageName: String // 정답 이미지
