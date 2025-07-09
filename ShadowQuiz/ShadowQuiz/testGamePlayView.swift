@@ -1,19 +1,21 @@
 //
-//  GamePlayView.swift
-//  0707project
+//  testGamePlayView.swift
+//  ShadowQuiz
 //
-//  Created by dkkim on 7/7/25.
+//  Created by dkkim on 7/9/25.
 //
+
 
 import SwiftUI
 import Foundation
 import Combine
 
-// MARK: - GamePlayView
-struct GamePlayView: View {
+//01. 화면 구조와 입력값
+struct testGamePlayView: View {
     let difficulty: String
     let selectedSubject: String
-    
+
+    //02. 주요 상태 변수
     @State private var quizItem: [QuizItem] = []
     @State private var currentIndex = 0
     @State private var userAnswer = ""
@@ -22,9 +24,10 @@ struct GamePlayView: View {
     @State private var showHint = false
     @State private var showFinalResult = false
     @State private var timer: Timer?
-    @State private var score: Int = 0 // 점수 상태
+    @State private var score: Int = 0
     @State var life: Int = 3
-    
+
+    //03-1. 난이도에 따른 시간 설정
     var timeLimit: Int {
         switch difficulty {
         case "하": return 180
@@ -33,7 +36,8 @@ struct GamePlayView: View {
         default: return 0
         }
     }
-    
+
+    //03-2. 난이도에 따른 점수 설정
     var scorePerQuestion: Int {
         switch difficulty {
         case "하": return 10
@@ -42,19 +46,21 @@ struct GamePlayView: View {
         default: return 0
         }
     }
-    
+
+    //04. 하트 표시용 문자열 변수
     @State var heart: String = "❤️"
     @State var brokenHeart: String = "💔"
     @State var lives: String = "❤️❤️❤️"
-    
+
     @State var timeRemaining: Int = 0
     @State var timerStarted = false
-    
+
+    //05. 타이머 함수
     func startTimer(duration: Int, onTimeUp: @escaping () -> Void) {
         guard !timerStarted else { return }
         timeRemaining = duration
         timerStarted = true
-        
+
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             DispatchQueue.main.async {
                 self.timeRemaining -= 1
@@ -66,8 +72,8 @@ struct GamePlayView: View {
             }
         }
     }
-    
-    // 정답 제출 처리
+
+    //06. 정답 제출 함수
     func handleAnswerSubmission(correctAnswer: String) {
         if userAnswer == correctAnswer {
             isCorrect = true
@@ -78,13 +84,11 @@ struct GamePlayView: View {
                 life -= 1
             }
         }
-        
-        // 라이프가 0이 되면 결과 화면으로
+
         if life <= 0 {
             showFinalResult = true
         }
-        
-        // 라이프 상태 업데이트
+
         switch life {
         case 1:
             lives = heart + brokenHeart + brokenHeart
@@ -98,52 +102,68 @@ struct GamePlayView: View {
         }
         showResult = true
     }
-    
+
     func stopTimer() {
         timer?.invalidate()
         timer = nil
         timerStarted = false
     }
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(hex: "#CBEFB9").ignoresSafeArea()
-                
-                if currentIndex < quizItem.count {
+
+                if showResult {
+                    if currentIndex < quizItem.count {
+                        AnswerResultView(
+                            score: score,
+                            isCorrect: isCorrect,
+                            correctImageName: quizItem[currentIndex].answerImageName,
+                            correctText: quizItem[currentIndex].answer,
+                            selectedLevelDefult: difficulty,
+                            selectedSubjectDefult: selectedSubject,
+                            onNext: {
+                                showResult = false
+                                if currentIndex + 1 < quizItem.count {
+                                    currentIndex += 1
+                                } else {
+                                    showFinalResult = true
+                                }
+                                userAnswer = ""
+                                showHint = false
+                            },
+                            onFinish: {
+                                showResult = false
+                                showFinalResult = true
+                            }
+                        )
+                    }
+                } else if currentIndex < quizItem.count {
                     let current = quizItem[currentIndex]
-                    
                     ScrollView {
                         VStack(spacing: 30) {
                             HStack {
-                                Text("⏱ 남은 시간: \(timeRemaining)초")
-                                    .bold()
+                                Text("⏱ 남은 시간: \(timeRemaining)초").bold()
                                 Spacer()
                                 Text("LIFE:")
                                 Text(lives)
                             }
-                            Text("점수: \(score)")
-                                .font(.title).bold()
-                            Text("무엇 일까요?")
-                                .font(.title)
-                            
+                            Text("점수: \(score)").font(.title).bold()
+                            Text("무엇 일까요?").font(.title)
                             Image(current.imageName)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 250)
-                            
                             TextField("정답을 입력하세요", text: $userAnswer)
                                 .font(.system(size: 40))
                                 .textFieldStyle(.roundedBorder)
                                 .frame(height: 10)
                                 .padding(.horizontal, 20)
-                            
                             HStack(spacing: 15) {
                                 Button("힌트") {
                                     showHint.toggle()
-                                }
-                                .buttonStyle(.bordered)
-                                
+                                }.buttonStyle(.bordered)
                                 Button("패스") {
                                     let skipped = quizItem.remove(at: currentIndex)
                                     quizItem.append(skipped)
@@ -152,71 +172,28 @@ struct GamePlayView: View {
                                     }
                                     userAnswer = ""
                                     showHint = false
-                                }
-                                .buttonStyle(.bordered)
-                                
+                                }.buttonStyle(.bordered)
                                 Button("정답 제출") {
                                     handleAnswerSubmission(correctAnswer: current.answer)
-                                    print(score)
-                                }
-                                .buttonStyle(.borderedProminent)
+                                }.buttonStyle(.borderedProminent)
                             }
-                            
                             Button("게임종료") {
                                 showFinalResult = true
-                            }
-                            .buttonStyle(.bordered)
-                            
+                            }.buttonStyle(.bordered)
                             if showHint {
-                                Text("힌트: \(current.hint)")
-                                    .foregroundColor(.blue)
+                                Text("힌트: \(current.hint)").foregroundColor(.blue)
                             }
                         }
                         .padding()
                     }
                 }
-            } // ← ✅ 여기까지가 ZStack 닫는 중괄호
-
-            // ✅ 이제 여기에 붙여야 오류 없음
-            .navigationDestination(isPresented: $showResult) {
-                if currentIndex < quizItem.count {
-                    AnswerResultView(
-                        score: score,
-                        isCorrect: isCorrect,
-                        correctImageName: quizItem[currentIndex].answerImageName,
-                        correctText: quizItem[currentIndex].answer,
-                        selectedLevelDefult: difficulty,
-                        selectedSubjectDefult: selectedSubject,
-                        onNext: {
-                            showResult = false
-                            if currentIndex + 1 < quizItem.count {
-                                currentIndex += 1
-                            } else {
-                                showFinalResult = true
-                            }
-                            userAnswer = ""
-                            showHint = false
-                        },
-                        onFinish: {
-                            showResult = false
-                            showFinalResult = true
-                        }
-                    )
-                } else {
-                    // 예외적으로 범위를 벗어난 경우 안전 처리
-                    Text("문제가 더 이상 없습니다.")
-                        .onAppear {
-                            showResult = false
-                            showFinalResult = true
-                        }
-                }
             }
-
             .navigationDestination(isPresented: $showFinalResult) {
                 ResultView(score: score, subject: selectedSubject)
             }
-        } // ← ✅ NavigationStack 닫기
-
+        }
+        // onAppear는 뷰가 화면에 처음 보일때 실행되는 코드다.
+        // 아래 코드는 퀴즈 데이터를 주제별로 가져옴. 그리고 타이머 시작
         .onAppear {
             if quizItem.isEmpty {
                 switch selectedSubject {
@@ -227,14 +204,13 @@ struct GamePlayView: View {
                 default: quizItem = pkmQuizList.shuffled()
                 }
             }
-            
-            // 타이머는 최초 1회만 시작됨
             if !timerStarted {
                 startTimer(duration: timeLimit) {
                     showFinalResult = true
                 }
             }
         }
+        // onDisappear는 뷰가 화면에 사라질때 실행되는 코드다.
         .onDisappear {
             timer?.invalidate()
         }
@@ -242,7 +218,8 @@ struct GamePlayView: View {
     }
 }
 
+
 // MARK: - Preview
 #Preview {
-    GamePlayView(difficulty: "하", selectedSubject: "동물")
+    testGamePlayView(difficulty: "하", selectedSubject: "동물")
 }

@@ -26,6 +26,7 @@ struct MainView: View {
     var rankList: [String] {
         let top3 = rankings
             .sorted { $0.score > $1.score }
+            .prefix(3) // 에러로 추가한 부분
         
         let medals = ["🥇", "🥈", "🥉"]
         
@@ -40,6 +41,8 @@ struct MainView: View {
     
     // 배경 색상
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
+    
+    
     
     var body: some View {
         NavigationStack {
@@ -136,7 +139,7 @@ struct MainView: View {
                     
                     // 슬라이드 랭킹
                     NavigationLink {
-                        RankingView(selectedSubject: "")
+                        RankingView()
                             .navigationBarBackButtonHidden(true)
                     } label: {
                         Text(rankList[safe: scoreIndex] ?? "아직 등록된 랭킹이 없습니다")
@@ -155,7 +158,7 @@ struct MainView: View {
                 
                 // 난이도,주제 데이터를 담아 view 이동
                 .navigationDestination(isPresented: $navigateToGame) {
-                    GamePlayView(difficulty: selectedLevelDefult, selectedSubject: selectedSubjectDefult)
+                    testGamePlayView(difficulty: selectedLevelDefult, selectedSubject: selectedSubjectDefult)
                 }
                 
             }
