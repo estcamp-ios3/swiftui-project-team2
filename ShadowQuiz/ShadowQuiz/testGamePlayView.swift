@@ -114,16 +114,19 @@ struct testGamePlayView: View {
             ZStack {
                 Color(hex: "#CBEFB9").ignoresSafeArea()
 
+                // 조건 분기 로직
+                // showResult=true ->
                 if showResult {
                     if currentIndex < quizItem.count {
                         AnswerResultView(
-                            score: score,
-                            isCorrect: isCorrect,
-                            correctImageName: quizItem[currentIndex].answerImageName,
-                            correctText: quizItem[currentIndex].answer,
-                            selectedLevelDefult: difficulty,
-                            selectedSubjectDefult: selectedSubject,
-                            onNext: {
+                            //정답 결과 화면으로 이동
+                            score: score, //현재 누적점수
+                            isCorrect: isCorrect, // 답이 맞았나 틀렸나
+                            correctImageName: quizItem[currentIndex].answerImageName,//정답 이미지
+                            correctText: quizItem[currentIndex].answer, //정답 텍스트
+                            selectedLevelDefult: difficulty, //선택한 난이도
+                            selectedSubjectDefult: selectedSubject, //선택한 주제
+                            onNext: { //"다음 문제" 버튼 누를때 실행할 로직
                                 showResult = false
                                 if currentIndex + 1 < quizItem.count {
                                     currentIndex += 1
@@ -133,7 +136,7 @@ struct testGamePlayView: View {
                                 userAnswer = ""
                                 showHint = false
                             },
-                            onFinish: {
+                            onFinish: { // " 게임종료" 버튼을 누를때 실행할 로직
                                 showResult = false
                                 showFinalResult = true
                             }
