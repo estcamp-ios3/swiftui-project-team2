@@ -9,13 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct ResultView: View {
-    
-    @Query var rankings: [Ranking]
+
     @State private var nickName: String = ""
     @State private var score: Int = 0
-    @State private var navigateToRanking = false
-    @Environment(\.modelContext) private var modelContext
-    
     
     var message: String {
         if score >= 150 {
@@ -27,17 +23,18 @@ struct ResultView: View {
         }
     }
     
-    
-    func insertRanking() {
-        let newRanking = Ranking(nickName: nickName, score: score)
-        modelContext.insert(newRanking)
-        do {
-            try modelContext.save()
-            print("Success to save: \(newRanking.nickName), \(newRanking.score)")
-        } catch {
-            print("Failed to save: \(error)")
+    @Model
+    class Result {
+        var userId: UUID
+        var score: Int
+//        var
+        init(id: UUID, score: Int) {
+            self.userId = id
+            self.score = score
         }
     }
+
+    
     
     
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
@@ -70,69 +67,54 @@ struct ResultView: View {
                         NavigationLink(destination: MainView()) {
                             Text("Try again🙁")
                                 .font(.system(size: 45).bold())
-                                .foregroundStyle(.gray)
                         }
                     }
-                    Spacer()
-                    Divider()
-                    HStack {
+                        Divider()
+                    
+//                    TextField("Write your Nickname", text: $nickName)
+//                        .textFieldStyle(.roundedBorder)
+//                        .padding(.horizontal)
+//                    NavigationLink(destination: MainView()) {
+//                        Text("Upload")
+//                    }
+                    
                         Spacer()
-                        NavigationLink(destination: MainView()) {
+                        HStack {
+                            Spacer()
+                            NavigationLink(destination: MainView()) {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.black.opacity(0.2))
+                                    .frame(width: 150, height: 100)
+                                    .overlay(Text("Go to HOME")
+                                        .font(.largeTitle))
+                            }
+                            Spacer()
                             Rectangle()
-                                .fill(Color.black.opacity(0.2))
-                                .frame(width: 160, height: 50)
-                                .overlay(Text("HOME")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 30)))
-                        }
-                        Spacer()
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 0.5, height: 60)
-                        Spacer()
-                        NavigationLink(destination: RankingView()) {
-                            Rectangle()
-                                .fill(Color.black.opacity(0.2))
-                                .frame(width: 160, height: 50)
-                                .overlay(Text("RANKING")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 30)))
+                                .frame(width: 1, height: 100)
+                            Spacer()
+                            NavigationLink(destination: RankingView()) {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.black.opacity(0.2))
+                                    .frame(width: 150, height: 100)
+                                    .overlay(Text("Check the\nRANKING")
+                                        .font(.largeTitle))
                         }
                         Spacer()
                     }
                 }
                 VStack {
-                    Spacer()
-                    Text("Upload your Score and Nickname🖋️")
-                        .frame(width: 350, alignment: .leading)
                     TextField("Write your Nickname", text: $nickName)
-                        .frame(width: 370)
                         .textFieldStyle(.roundedBorder)
                         .padding(.horizontal)
                     
-                    Button {
-                        insertRanking()
-                        navigateToRanking = true
-                    } label: {
+                    NavigationLink(destination: RankingView()) {
                         Text("Upload")
-                            .font(.title3)
-                            .frame(width: 70, height: 0)
-                            .padding()
-                            .background(Color.black.opacity(0.3))
-                            .foregroundStyle(.white)
-                            .cornerRadius(0)
                     }
-                    Spacer()
                 }
-            }
-            .navigationDestination(isPresented: $navigateToRanking) {
-                RankingView()
             }
         }
     }
 }
-
-
 #Preview {
     ResultView()
 }
