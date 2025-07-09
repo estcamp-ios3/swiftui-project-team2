@@ -63,12 +63,15 @@ struct RankingView: View {
                     
                     ForEach(ranking, id: \.id) { rank in
                         GridRow{
-                            Text("No. \(ranking.firstIndex(of: rank)! + 1)")
+                            Text(
+                                ranking.firstIndex(of: rank)! == 0
+                                ? "🥇"
+                                : "\(ranking.firstIndex(of: rank)! + 1)"
+                            )
                             Text(rank.nickName)
                             Text("\(rank.score)")
                         }
                         .padding()
-                        .background(Color.white)
                     }
                 }
                 
