@@ -20,7 +20,7 @@ struct RankingView: View {
         Rank(nickName: "hide on bush", score: 200),
         Rank(nickName: "CJ CloudTempler", score: 180),
         Rank(nickName: "beamman", score: 100),
-    ]
+    ].sorted { $0.score > $1.score }
     
     var body: some View {
         ZStack {
@@ -61,7 +61,7 @@ struct RankingView: View {
                     }
                     .padding()
                     
-                    ForEach(ranking.sorted { $0.score > $1.score }, id: \.id) { rank in
+                    ForEach(ranking, id: \.id) { rank in
                         GridRow{
                             Text("No. \(ranking.firstIndex(of: rank)! + 1)")
                             Text(rank.nickName)
