@@ -12,7 +12,7 @@ struct RankingView: View {
     let backgroundColor: Color = Color(red: 203/255, green: 239/255, blue: 185/255)
     @State var numberOfRank: Int = 1
     
-    @State private var selectedSubjectDefult: String = "Pokémon"
+    @State private var selectedSubject: String = "Pokémon"
     
     var ranking: [Rank] = [
         Rank(nickName: "MIDKING", score: 300),
@@ -33,18 +33,18 @@ struct RankingView: View {
                 HStack(spacing: 0) {
                     ForEach(["Pokémon", "Dinosaur", "Animal", "Things"], id: \.self) { sub in
                         Button {
-                            selectedSubjectDefult = sub
+                            selectedSubject = sub
                         } label: {
                             Text(sub)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 8)
                                 .background(
-                                    selectedSubjectDefult == sub
+                                    selectedSubject == sub
                                     ? Color.white
                                     : Color.black.opacity(0.5)
                                 )
                                 .foregroundColor(
-                                    selectedSubjectDefult == sub
+                                    selectedSubject == sub
                                     ? Color.black
                                     : Color.white
                                 )
