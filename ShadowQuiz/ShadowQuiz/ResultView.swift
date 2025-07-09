@@ -33,7 +33,7 @@ struct ResultView: View {
         modelContext.insert(newRanking)
         do {
             try modelContext.save()
-            print("Succese to save: \(newRanking.nickName), \(newRanking.score)")
+            print("Success to save: \(newRanking.nickName), \(newRanking.score)")
         } catch {
             print("Failed to save: \(error)")
         }
@@ -70,35 +70,42 @@ struct ResultView: View {
                         NavigationLink(destination: MainView()) {
                             Text("Try again🙁")
                                 .font(.system(size: 45).bold())
+                                .foregroundStyle(.gray)
                         }
                     }
-                    Divider()
                     Spacer()
+                    Divider()
                     HStack {
                         Spacer()
                         NavigationLink(destination: MainView()) {
-                            RoundedRectangle(cornerRadius: 20)
+                            Rectangle()
                                 .fill(Color.black.opacity(0.2))
-                                .frame(width: 150, height: 100)
-                                .overlay(Text("Go to HOME")
+                                .frame(width: 150, height: 50)
+                                .overlay(Text("HOME")
+                                    .foregroundStyle(.white)
                                     .font(.largeTitle))
                         }
                         Spacer()
                         Rectangle()
-                            .frame(width: 1, height: 100)
+                            .frame(width: 1, height: 50)
                         Spacer()
                         NavigationLink(destination: RankingView()) {
-                            RoundedRectangle(cornerRadius: 20)
+                            Rectangle()
                                 .fill(Color.black.opacity(0.2))
-                                .frame(width: 150, height: 100)
-                                .overlay(Text("Check the\nRANKING")
+                                .frame(width: 150, height: 50)
+                                .overlay(Text("RANKING")
+                                    .foregroundStyle(.white)
                                     .font(.largeTitle))
                         }
                         Spacer()
                     }
                 }
                 VStack {
+                    Spacer()
+                    Text("Upload your Score and Nickname🖋️")
+                        .frame(width: 350, alignment: .leading)
                     TextField("Write your Nickname", text: $nickName)
+                        .frame(width: 370)
                         .textFieldStyle(.roundedBorder)
                         .padding(.horizontal)
                     
@@ -107,11 +114,13 @@ struct ResultView: View {
                         navigateToRanking = true
                     } label: {
                         Text("Upload")
-                            .font(.title2)
+                            .font(.title3)
                             .padding()
-                            .background(Color.blue.opacity(0.3))
-                            .cornerRadius(10)
+                            .background(Color.black.opacity(0.3))
+                            .foregroundStyle(.white)
+                            .cornerRadius(0)
                     }
+                    Spacer()
                 }
             }
             .navigationDestination(isPresented: $navigateToRanking) {
