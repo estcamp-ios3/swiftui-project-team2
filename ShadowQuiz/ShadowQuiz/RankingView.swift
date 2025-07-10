@@ -65,7 +65,7 @@ struct RankingView: View {
                     }
                     .padding()
                     NavigationLink(destination: MainView().navigationBarBackButtonHidden(true)){
-                        Text("Home")
+                        Text("홈으로")
                     }
                     .foregroundStyle(.white)
                     .frame(width: 200, height: 50)

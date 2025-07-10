@@ -79,9 +79,9 @@ struct ResultView: View {
                     Spacer()
                     VStack {
                         Spacer()
-                        Text("Upload your Score and Nickname🖋️")
+                        Text("닉네임과 점수를 등록하세요")
                             .frame(width: 350, alignment: .leading)
-                        TextField("Write your Nickname", text: $nickName)
+                        TextField("닉네임", text: $nickName)
                             .frame(width: 370)
                             .textFieldStyle(.roundedBorder)
                             .padding(.horizontal)

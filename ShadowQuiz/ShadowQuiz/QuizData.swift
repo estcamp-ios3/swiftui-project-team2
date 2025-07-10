@@ -11,7 +11,7 @@ let pkmQuizList: [QuizItem] = [
     QuizItem(imageName: "pkmshadow01", answerImageName: "pkmimage01", answer: "골벳", hint: "두글자", category: "포켓몬"),
     QuizItem(imageName: "pkmshadow02", answerImageName: "pkmimage02", answer: "고지", hint: "두글자", category: "포켓몬"),
     QuizItem(imageName: "pkmshadow03", answerImageName: "pkmimage03", answer: "꼬렛", hint: "두글자", category: "포켓몬"),
-    QuizItem(imageName: "pkmshadow04", answerImageName: "pkmimage04", answer: "니드리노", hint: "네글자", category: "포켓몬"),
+    QuizItem(imageName: "pkmshadow04", answerImageName: "pkmimage04", answer: "피카츄", hint: "세글자", category: "포켓몬"),
     QuizItem(imageName: "pkmshadow05", answerImageName: "pkmimage05", answer: "골덕", hint: "두글자", category: "포켓몬"),
     QuizItem(imageName: "pkmshadow06", answerImageName: "pkmimage06", answer: "콘치", hint: "두글자", category: "포켓몬"),
     QuizItem(imageName: "pkmshadow07", answerImageName: "pkmimage07", answer: "레트라", hint: "세글자", category: "포켓몬"),

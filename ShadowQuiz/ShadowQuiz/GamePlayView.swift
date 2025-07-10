@@ -132,6 +132,8 @@ struct GamePlayView: View {
                                 .scaledToFit()
                                 .frame(height: 250)
                             
+                            Text("\(currentIndex+1)/10")
+                            
                             TextField("정답을 입력하세요", text: $userAnswer)
                                 .font(.system(size: 40))
                                 .textFieldStyle(.roundedBorder)
@@ -201,7 +203,7 @@ struct GamePlayView: View {
                             showResult = false
                             showFinalResult = true
                         }
-                    )
+                    ).navigationBarBackButtonHidden(true)
                 } else {
                     // 예외적으로 범위를 벗어난 경우 안전 처리
                     Text("문제가 더 이상 없습니다.")
@@ -213,7 +215,7 @@ struct GamePlayView: View {
             }
 
             .navigationDestination(isPresented: $showFinalResult) {
-                ResultView(score: score, subject: selectedSubject)
+                ResultView(score: score, subject: selectedSubject).navigationBarBackButtonHidden(true)
             }
         } // ← ✅ NavigationStack 닫기
 
@@ -238,7 +240,6 @@ struct GamePlayView: View {
         .onDisappear {
             timer?.invalidate()
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
