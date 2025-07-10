@@ -12,7 +12,7 @@ struct ResultView: View {
     
     @Query var rankings: [Rank]
     @State private var nickName: String = ""
-    @State private var score: Int = 0
+    @State var score: Int = 0
     @State var subject: String
     @State private var navigateToRanking = false
     @Environment(\.modelContext) private var modelContext
